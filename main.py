@@ -1182,5 +1182,5 @@ class FLStudioDAW(tk.Tk):
         self.draw_playlist()
 
 if __name__ == "__main__":
-    app = FLStudioDAW()
+    app = LunaBoxDAW()
     app.mainloop()
