@@ -10,9 +10,13 @@ from tkinter import ttk, filedialog, messagebox
 import numpy as np
 import pygame
 
-# INICJALIZACJA AUDIO
-pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=512)
-pygame.mixer.init()
+# INICJALIZACJA AUDIO (zabezpieczona przed brakiem kart dźwiękowych/Wine)
+try:
+    pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=512)
+    pygame.mixer.init()
+except Exception:
+    os.environ["SDL_AUDIODRIVER"] = "dummy"
+    pygame.mixer.init()
 
 # GRAPHITE THEME
 COLOR_BG = "#1e222b"
@@ -497,10 +501,10 @@ class FLStudioDAW(tk.Tk):
         self.wave_cb.pack(side=tk.LEFT, pady=3)
         self.wave_cb.bind("<<ComboboxSelected>>", self.on_wave_change)
 
-        self.btn_load_plugin = tk.Button(self.pr_toolbar, text="🔌 Load Plugin (.plug)", bg=COLOR_SURFACE, fg="#f1c40f", font=("Segoe UI", 8, "bold"), relief=tk.FLAT, command=self.load_plugin_file)
+        self.btn_load_plugin = tk.Button(self.pr_toolbar, text="[Plug] Load Plugin (.plug)", bg=COLOR_SURFACE, fg="#f1c40f", font=("Segoe UI", 8, "bold"), relief=tk.FLAT, command=self.load_plugin_file)
         self.btn_load_plugin.pack(side=tk.LEFT, padx=5, pady=3)
 
-        self.btn_load_sample = tk.Button(self.pr_toolbar, text="📂 Load Sample", bg=COLOR_SURFACE, fg=COLOR_ACCENT, font=("Segoe UI", 8, "bold"), relief=tk.FLAT, command=self.load_sample_file)
+        self.btn_load_sample = tk.Button(self.pr_toolbar, text="[Folder] Load Sample", bg=COLOR_SURFACE, fg=COLOR_ACCENT, font=("Segoe UI", 8, "bold"), relief=tk.FLAT, command=self.load_sample_file)
         self.btn_load_sample.pack(side=tk.LEFT, padx=2, pady=3)
 
         self.slide_var = tk.BooleanVar(value=False)
@@ -1182,5 +1186,5 @@ class FLStudioDAW(tk.Tk):
         self.draw_playlist()
 
 if __name__ == "__main__":
-    app = LunaBoxDAW()
+    app = LunaBox()
     app.mainloop()
